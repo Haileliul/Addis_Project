@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 
 const dbUsername = process.env.DB_USERNAME;
 const dbPassword = process.env.DB_PASSWORD;
+const dbName = process.env.DB_NAME;
 
-const uri = `mongodb+srv://${dbUsername}:${dbPassword}@music.sror1.mongodb.net/?retryWrites=true&w=majority&appName=music`;
+const uri = `mongodb+srv://${dbUsername}:${dbPassword}@music.sror1.mongodb.net/${dbName}?retryWrites=true&w=majority&appName=music`;
 
 async function connectDB() {
   try {
