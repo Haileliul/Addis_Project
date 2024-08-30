@@ -10,8 +10,7 @@ const port = process.env.PORT || 3000;
 var corsOptions = {
   origin: [
     "https://localhost:3001",
-    "https://example.com",
-    "http://another-site.com",
+    "https://addis-project-frontend.onrender.com/",
   ],
 };
 // middlewares
