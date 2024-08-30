@@ -9,8 +9,7 @@ const port = process.env.PORT || 3000;
 
 app.use(
   cors({
-    origin: "https://addis-project-frontend.onrender.com",
-    // Allow requests from your frontend's origin
+    origin: ["https://addis-project-frontend.onrender.com"], // Allow requests from your frontend's origin
     methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
     credentials: true, // Allow cookies and credentials to be sent
