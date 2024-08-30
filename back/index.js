@@ -14,7 +14,7 @@ var corsOptions = {
     "http://another-site.com",
   ],
 };
-middlewares;
+// middlewares
 
 app.use(cors(corsOptions));
 app.use(express.json());
