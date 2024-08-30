@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "@emotion/styled";
 import MediumCard from "../components/MediumCard";
 import GenerCard from "../components/GenerCard";
@@ -6,6 +7,7 @@ import ListItem from "../components/ListItem";
 import CreateModal from "../components/CreateModal";
 import UpdateModal from "../components/UpdateModal";
 import { FaMusic } from "react-icons/fa";
+import { fetchSongs } from "../Redux/songsSlice"; // Import the fetchSongs thunk
 
 const DefaultContent = styled.div`
   flex: 2;
@@ -43,37 +45,37 @@ const GenerContainer = styled.div`
 `;
 
 const HorizontalDivider = styled.hr`
-  width: 100%; /* Fits the width of the container */
-  height: 10px; /* Thickness of the divider */
-  background-color: white; /* Background color */
-  border: none; /* Removes default border styles */
-  margin-bottom: 10px; /* Adds spacing below the divider */
+  width: 100%;
+  height: 10px;
+  background-color: white;
+  border: none;
+  margin-bottom: 10px;
 `;
 
 const ListContainer = styled.div`
-  height: 250px; /* Fixed height */
-  overflow-y: auto; /* Enables vertical scrolling if content overflows */
-  background-color: ${({ theme }) =>
-    theme.colors.light}; /* Optional background color */
-  border-radius: 8px; /* Optional border radius */
-  padding: 10px; /* Optional padding */
+  height: 250px;
+  overflow-y: auto;
+  background-color: ${({ theme }) => theme.colors.light};
+  border-radius: 8px;
+  padding: 10px;
 `;
 
-const songsData = [
-  { title: "Song A", artist: "Artist 1", album: "Album X", genre: "hiphop" },
-  { title: "Song B", artist: "Artist 2", album: "Album Y", genre: "reggae" },
-  { title: "Song C", artist: "Artist 1", album: "Album Z", genre: "rap" },
-  { title: "Song D", artist: "Artist 3", album: "Album W", genre: "pop" },
-  // Add more songs as needed
-];
-
-const genreList = ["hiphop", "reggae", "rap", "pop"];
+const genreList = ["Genre Name", "reggae", "rap", "pop"];
 
 const DefaultPage = () => {
+  const dispatch = useDispatch();
+  const { songs, status } = useSelector((state) => state.songs); // Access songs and status from the Redux store
+
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSong, setSelectedSong] = useState(null); // New state
+  const [selectedSong, setSelectedSong] = useState(null);
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchSongs()); // Fetch songs when the component mounts
+    }
+  }, [status, dispatch]);
 
   const handleGenreClick = (genre) => {
     setSelectedGenre(genre);
@@ -92,15 +94,14 @@ const DefaultPage = () => {
     console.log("New song added:", newSong);
     setIsModalOpen(false);
     setSelectedSong(null);
-    // Update songsData state or handle the song update here
   };
 
   const filteredSongs = selectedGenre
-    ? songsData.filter((song) => song.genre === selectedGenre)
+    ? songs.filter((song) => song.genre === selectedGenre)
     : [];
 
   const getSongCountByGenre = (genre) => {
-    return songsData.filter((song) => song.genre === genre).length;
+    return songs.filter((song) => song.genre === genre).length;
   };
 
   return (
@@ -114,7 +115,7 @@ const DefaultPage = () => {
               key={genre}
               numberValue={getSongCountByGenre(genre)}
               name={genre}
-              onClick={handleGenreClick}
+              onClick={() => handleGenreClick(genre)}
             />
           ))}
         </GenerContainer>
@@ -128,7 +129,7 @@ const DefaultPage = () => {
               title={song.title}
               description={`Artist: ${song.artist}, Album: ${song.album}`}
               prefixIcon={<FaMusic />}
-              onEdit={() => handleEdit(song)} // Pass song to handleEdit
+              onEdit={() => handleEdit(song)}
               onDelete={handleDelete}
             />
           ))
@@ -140,13 +141,13 @@ const DefaultPage = () => {
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
         onSubmit={handleAddSong}
-        initialData={selectedSong} // Pass selected song to modal
+        initialData={selectedSong}
       />
       <CreateModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleAddSong}
-        initialData={selectedSong} // Pass selected song to modal
+        initialData={selectedSong}
       />
     </DefaultContent>
   );
