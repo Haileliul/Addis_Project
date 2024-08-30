@@ -7,16 +7,16 @@ const songrouter = require("./src/Routes/SongRouter");
 const app = express();
 const port = process.env.PORT || 3000;
 
-// var corsOptions = {
-//   origin: [
-//     "https://localhost:3001",
-//     "https://example.com",
-//     "http://another-site.com",
-//   ],
-// };
-//middlewares
+var corsOptions = {
+  origin: [
+    "https://localhost:3001",
+    "https://example.com",
+    "http://another-site.com",
+  ],
+};
+middlewares;
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
