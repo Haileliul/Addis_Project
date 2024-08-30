@@ -13,34 +13,57 @@ const PageLayout = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
 `;
+
 const Container = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1200px;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-  /* Set maximum width and height */
-  min-width: 100vw;
-  margin: 10px;
-  max-width: 1350px;
-  max-height: 700px;
-  background-color: red;
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
+
 const Content = styled.div`
   flex: 1;
   padding: ${({ theme }) => theme.spacing.large};
   background-color: ${({ theme }) => theme.colors.primary};
+  overflow-y: auto;
+
+  @media (max-width: 767px) {
+    padding: ${({ theme }) => theme.spacing.medium};
+  }
 `;
 
 const SongList = styled.ul`
   list-style: none;
   padding: 0;
+  margin: 0;
 `;
 
 const SongItem = styled.li`
   margin-bottom: ${({ theme }) => theme.spacing.medium};
   padding: ${({ theme }) => theme.spacing.medium};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.secondary};
+  background-color: ${({ theme }) => theme.colors.background};
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  & strong {
+    color: ${({ theme }) => theme.colors.text};
+  }
+
+  @media (max-width: 767px) {
+    margin-bottom: ${({ theme }) => theme.spacing.small};
+    padding: ${({ theme }) => theme.spacing.small};
+  }
 `;
 
 const NotFoundMessage = styled.div`
@@ -49,7 +72,7 @@ const NotFoundMessage = styled.div`
   align-items: center;
   height: 100%;
   font-size: 1.5em;
-  color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const songsData = [
