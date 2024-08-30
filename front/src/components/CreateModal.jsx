@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { FaTimes } from "react-icons/fa";
+import axios from "axios"; // Import axios
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -78,10 +79,19 @@ const Modal = ({ isOpen, onClose, onSubmit }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
-    onClose();
+    try {
+      // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
+      await axios.post(
+        "https://addis-project-3typ.onrender.com/api/Song/addSong",
+        formData
+      );
+      onSubmit(formData); // Call the onSubmit callback if needed
+      onClose(); // Close the modal
+    } catch (error) {
+      console.error("There was an error adding the song!", error);
+    }
   };
 
   if (!isOpen) return null;

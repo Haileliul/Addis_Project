@@ -60,7 +60,29 @@ const ListContainer = styled.div`
   padding: 10px;
 `;
 
-const genreList = ["Genre Name", "reggae", "rap", "pop"];
+const ShimmerContainer = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const ShimmerEffect = styled.div`
+  width: 100%;
+  height: 50px;
+  background: #f6f7f8;
+  background-image: linear-gradient(
+    to right,
+    #f6f7f8 0%,
+    #e7e7e7 20%,
+    #f6f7f8 40%,
+    #f6f7f8 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 800px 104px;
+  display: inline-block;
+  position: relative;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 8px;
+`;
 
 const DefaultPage = () => {
   const dispatch = useDispatch();
@@ -70,12 +92,21 @@ const DefaultPage = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSong, setSelectedSong] = useState(null);
+  const [genres, setGenres] = useState([]); // State to store the list of genres
 
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchSongs()); // Fetch songs when the component mounts
     }
   }, [status, dispatch]);
+
+  useEffect(() => {
+    // Extract genres from the fetched songs
+    if (songs.length > 0) {
+      const uniqueGenres = [...new Set(songs.map((song) => song.genre))];
+      setGenres(uniqueGenres);
+    }
+  }, [songs]);
 
   const handleGenreClick = (genre) => {
     setSelectedGenre(genre);
@@ -110,14 +141,23 @@ const DefaultPage = () => {
       <TopContainer>
         <MediumCard onClick={() => setIsModalOpen(true)} />
         <GenerContainer>
-          {genreList.map((genre) => (
-            <GenerCard
-              key={genre}
-              numberValue={getSongCountByGenre(genre)}
-              name={genre}
-              onClick={() => handleGenreClick(genre)}
-            />
-          ))}
+          {genres.length > 0 ? (
+            genres.map((genre) => (
+              <GenerCard
+                key={genre}
+                numberValue={getSongCountByGenre(genre)}
+                name={genre}
+                onClick={() => handleGenreClick(genre)}
+              />
+            ))
+          ) : (
+            <ShimmerContainer>
+              {/* Render shimmer effect while genres are loading */}
+              <ShimmerEffect />
+              <ShimmerEffect />
+              <ShimmerEffect />
+            </ShimmerContainer>
+          )}
         </GenerContainer>
       </TopContainer>
       <HorizontalDivider />
