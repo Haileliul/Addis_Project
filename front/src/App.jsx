@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ThemeProvider } from "@emotion/react";
 import styled from "@emotion/styled";
 import Sidebar from "./components/Sidebar";
@@ -6,6 +7,7 @@ import DefaultPage from "./pages/DefaultPage";
 import backgroundImage from "./assets/background.png";
 import { filterSongs } from "./utils/filterSongs";
 import { theme } from "./utils/Theme";
+import { fetchSongs } from "../src/Redux/songsSlice";
 
 const PageLayout = styled.div`
   width: 100vw;
@@ -89,21 +91,30 @@ const NotFoundMessage = styled.div`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-const songsData = [
-  { title: "Song A", artist: "Artist 1", album: "Album X", genre: "Rock" },
-  { title: "Song B", artist: "Artist 2", album: "Album Y", genre: "Pop" },
-  { title: "Song C", artist: "Artist 1", album: "Album Z", genre: "Jazz" },
-  { title: "Song A", artist: "Artist 1", album: "Album X", genre: "Rock" },
-  { title: "Song B", artist: "Artist 2", album: "Album Y", genre: "Pop" },
-  { title: "Song C", artist: "Artist 1", album: "Album Z", genre: "Jazz" },
-  // Add more songs as needed
-];
-function App() {
+// const songsData = [
+//   { title: "Song A", artist: "Artist 1", album: "Album X", genre: "Rock" },
+//   { title: "Song B", artist: "Artist 2", album: "Album Y", genre: "Pop" },
+//   { title: "Song C", artist: "Artist 1", album: "Album Z", genre: "Jazz" },
+//   { title: "Song A", artist: "Artist 1", album: "Album X", genre: "Rock" },
+//   { title: "Song B", artist: "Artist 2", album: "Album Y", genre: "Pop" },
+//   { title: "Song C", artist: "Artist 1", album: "Album Z", genre: "Jazz" },
+//   // Add more songs as needed
+// ];
+const App = () => {
+  const dispatch = useDispatch();
+  const songs = useSelector((state) => state.songs.songs);
+  const songStatus = useSelector((state) => state.songs.status);
   const [isFilterApplied, setIsFilterApplied] = useState(false);
   const [filteredSongs, setFilteredSongs] = useState([]);
 
+  useEffect(() => {
+    if (songStatus === "idle") {
+      dispatch(fetchSongs());
+    }
+  }, [songStatus, dispatch]);
+
   const handleFilterChange = (filters) => {
-    const filtered = filterSongs(songsData, filters);
+    const filtered = filterSongs(songs, filters);
     setFilteredSongs(filtered);
     setIsFilterApplied(filtered.length > 0);
   };
@@ -140,6 +151,6 @@ function App() {
       </PageLayout>
     </ThemeProvider>
   );
-}
+};
 
 export default App;
