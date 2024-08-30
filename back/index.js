@@ -1,7 +1,7 @@
 // index.js
 const express = require("express");
 const connectDB = require("./src/config/dbConfig");
-// const cors = require("cors");
+const cors = require("cors");
 const songrouter = require("./src/Routes/SongRouter");
 
 const app = express();
