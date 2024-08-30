@@ -3,17 +3,22 @@ import { ThemeProvider } from "@emotion/react";
 import styled from "@emotion/styled";
 import Sidebar from "./components/Sidebar";
 import DefaultPage from "./pages/DefaultPage";
-
+import backgroundImage from "./assets/background.png";
+import { filterSongs } from "./utils/filterSongs";
 import { theme } from "./utils/Theme";
 
 const PageLayout = styled.div`
   width: 100vw;
-  min-height: 100vh;
-  background-color: ${({ theme }) => theme.colors.background};
+  height: 100vh; /* Ensure it covers the full height of the viewport */
+  background-image: url(${backgroundImage});
+  background-size: cover; /* Ensure the image covers the entire area */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  overflow: hidden; /* Prevents scrolling */
 `;
 
 const Container = styled.div`
@@ -22,10 +27,9 @@ const Container = styled.div`
   align-items: stretch;
   width: 100%;
   max-width: 1200px;
-  background-color: ${({ theme }) => theme.colors.secondary};
+  background-color: ${({ theme }) => theme.colors.light};
   border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1);
 
   @media (min-width: 768px) {
     flex-direction: row;
@@ -36,11 +40,21 @@ const Content = styled.div`
   flex: 1;
   padding: ${({ theme }) => theme.spacing.large};
   background-color: ${({ theme }) => theme.colors.primary};
-  overflow-y: auto;
+  overflow-y: hidden; /* Prevents content overflow */
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+  }
 
   @media (max-width: 767px) {
     padding: ${({ theme }) => theme.spacing.medium};
   }
+`;
+
+const SongListWrapper = styled.div`
+  height: 500px; /* Restricts height to parent (Content) height */
+  overflow-y: auto; /* Allows scrolling if content overflows */
 `;
 
 const SongList = styled.ul`
@@ -79,38 +93,19 @@ const songsData = [
   { title: "Song A", artist: "Artist 1", album: "Album X", genre: "Rock" },
   { title: "Song B", artist: "Artist 2", album: "Album Y", genre: "Pop" },
   { title: "Song C", artist: "Artist 1", album: "Album Z", genre: "Jazz" },
+  { title: "Song A", artist: "Artist 1", album: "Album X", genre: "Rock" },
+  { title: "Song B", artist: "Artist 2", album: "Album Y", genre: "Pop" },
+  { title: "Song C", artist: "Artist 1", album: "Album Z", genre: "Jazz" },
   // Add more songs as needed
 ];
-
 function App() {
   const [isFilterApplied, setIsFilterApplied] = useState(false);
   const [filteredSongs, setFilteredSongs] = useState([]);
 
   const handleFilterChange = (filters) => {
-    // Check if any filter fields are touched
-    const noFiltersApplied =
-      !filters.title && !filters.artist && !filters.album && !filters.genre;
-
-    if (noFiltersApplied) {
-      setIsFilterApplied(false);
-      return;
-    }
-
-    setIsFilterApplied(true);
-
-    const filtered = songsData.filter(
-      (song) =>
-        (!filters.title ||
-          song.title.toLowerCase().includes(filters.title.toLowerCase())) &&
-        (!filters.artist ||
-          song.artist.toLowerCase().includes(filters.artist.toLowerCase())) &&
-        (!filters.album ||
-          song.album.toLowerCase().includes(filters.album.toLowerCase())) &&
-        (!filters.genre ||
-          song.genre.toLowerCase().includes(filters.genre.toLowerCase()))
-    );
-
+    const filtered = filterSongs(songsData, filters);
     setFilteredSongs(filtered);
+    setIsFilterApplied(filtered.length > 0);
   };
 
   return (
@@ -124,7 +119,7 @@ function App() {
                 <DefaultPage />
               </div>
             ) : filteredSongs.length > 0 ? (
-              <div>
+              <SongListWrapper>
                 <h1>Song List</h1>
                 <SongList>
                   {filteredSongs.map((song, index) => (
@@ -136,7 +131,7 @@ function App() {
                     </SongItem>
                   ))}
                 </SongList>
-              </div>
+              </SongListWrapper>
             ) : (
               <NotFoundMessage>Not Found</NotFoundMessage>
             )}

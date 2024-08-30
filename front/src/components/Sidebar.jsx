@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 
 const SidebarContainer = styled.div`
-  width: 250px;
+  max-width: 250px;
   background-color: ${({ theme }) => theme.colors.background};
   padding: ${({ theme }) => theme.spacing.large};
   box-shadow: ${({ theme }) => theme.shadows.card};
   border-radius: 8px;
 
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 700px) {
     display: none;
   }
 `;
