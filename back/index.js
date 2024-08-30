@@ -1,19 +1,22 @@
 // index.js
 const express = require("express");
 const connectDB = require("./src/config/dbConfig");
-const cors = require("cors");
+// const cors = require("cors");
 const songrouter = require("./src/Routes/SongRouter");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-var corOptions = {
-  origin: "https://localhost:3001",
-};
-
+// var corsOptions = {
+//   origin: [
+//     "https://localhost:3001",
+//     "https://example.com",
+//     "http://another-site.com",
+//   ],
+// };
 //middlewares
 
-app.use(cors(corOptions));
+// app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
