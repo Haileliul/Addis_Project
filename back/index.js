@@ -11,7 +11,7 @@ app.use(
   cors({
     origin: [
       "https://localhost:3001",
-      "https://addis-project-frontend.onrender.com/",
+      "https://addis-project-frontend.onrender.com",
     ], // Allow requests from your frontend's origin
     methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
