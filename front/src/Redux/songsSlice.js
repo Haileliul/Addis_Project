@@ -5,7 +5,13 @@ import axios from "axios";
 // Define an async thunk to fetch songs from the API
 export const fetchSongs = createAsyncThunk("songs/fetchSongs", async () => {
   const response = await axios.get(
-    "https://addis-project-3typ.onrender.com/api/Song/allsongs"
+    "https://addis-project-3typ.onrender.com/api/Song/allsongs",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*", // This won't work unless the server allows it
+      },
+    }
   );
   return response.data;
 });
