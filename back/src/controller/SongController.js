@@ -4,6 +4,17 @@ const Song = require("../model/SongModel"); // Adjust the path to your Song mode
 const addSong = async (req, res) => {
   try {
     const newSong = new Song(req.body); // Create a new Song instance with request body data
+    /*  const { title, artist, album, genre } = req.body;
+
+    // Check if a song with the same title, artist, and album already exists
+    const existingSong = await SongModel.findOne({ title, artist, album });
+
+    if (existingSong) {
+      // If a song already exists with the same details, send a 409 Conflict response
+      return res
+        .status(409)
+        .json({ message: "Song already exists", song: existingSong });
+    } */
     await newSong.save(); // Save the new song to the database
     res
       .status(201)
@@ -17,7 +28,12 @@ const addSong = async (req, res) => {
 const getAllSongs = async (req, res) => {
   try {
     const songs = await Song.find(); // Retrieve all songs from the database
-    res.status(200).json(songs);
+    if (songs.length === 0) {
+      return res.status(404).json({ message: "No songs found" });
+    } else {
+      res.status(200).json(songs);
+    }
+    // res.status(200).json(songs);
   } catch (error) {
     res.status(500).json({ message: "Error fetching songs", error });
   }

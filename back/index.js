@@ -5,7 +5,7 @@ const cors = require("cors");
 const songrouter = require("./src/Routes/SongRouter");
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 var corOptions = {
   origin: "https://localhost:3001",
