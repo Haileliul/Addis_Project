@@ -1,21 +1,26 @@
 // index.js
 const express = require("express");
 const connectDB = require("./src/config/dbConfig");
-// const cors = require("cors");
+const cors = require("cors");
 const songrouter = require("./src/Routes/SongRouter");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// var corsOptions = {
-//   origin: [
-//     "https://localhost:3001",
-//     "https://addis-project-frontend.onrender.com/",
-//   ],
-// };
+app.use(
+  cors({
+    origin: [
+      "https://localhost:3001",
+      "https://addis-project-frontend.onrender.com/",
+    ], // Allow requests from your frontend's origin
+    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
+    credentials: true, // Allow cookies and credentials to be sent
+  })
+);
+
 // middlewares
 
-// app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
