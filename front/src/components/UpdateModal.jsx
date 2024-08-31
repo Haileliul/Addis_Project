@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { FaTimes } from "react-icons/fa";
+import axios from "axios"; // Import axios
+import { fetchSongs } from "../Redux/songsSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -22,6 +25,7 @@ const ModalContent = styled.div`
   border-radius: 8px;
   width: 400px;
   max-width: 80%;
+  position: relative;
 `;
 
 const CloseButton = styled.button`
@@ -65,6 +69,8 @@ const Button = styled.button`
 `;
 
 const UpdateModal = ({ isOpen, onClose, onSubmit, initialData }) => {
+  const dispatch = useDispatch();
+  const { songs, status } = useSelector((state) => state.songs); // Access songs and status from the Redux store
   const [formData, setFormData] = useState({
     title: "",
     artist: "",
@@ -83,10 +89,22 @@ const UpdateModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
-    onClose();
+    try {
+      // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
+      // Assuming you have an 'id' in initialData for identifying the record to update
+      await axios.put(
+        `https://addis-project-3typ.onrender.com/api/Song/${initialData._id}`,
+        formData
+      );
+      onSubmit(formData); // Call the onSubmit callback if needed
+      dispatch(fetchSongs());
+      onClose(); // Close the modal
+      alert("Song Updated Successfully");
+    } catch (error) {
+      console.error("There was an error updating the song!", error);
+    }
   };
 
   if (!isOpen) return null;

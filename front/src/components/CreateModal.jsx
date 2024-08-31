@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios"; // Import axios
+import { fetchSongs } from "../Redux/songsSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -67,6 +69,9 @@ const Button = styled.button`
 `;
 
 const Modal = ({ isOpen, onClose, onSubmit }) => {
+  const dispatch = useDispatch();
+  const { songs, status } = useSelector((state) => state.songs); // Access songs and status from the Redux store
+
   const [formData, setFormData] = useState({
     title: "",
     artist: "",
@@ -88,7 +93,9 @@ const Modal = ({ isOpen, onClose, onSubmit }) => {
         formData
       );
       onSubmit(formData); // Call the onSubmit callback if needed
+      dispatch(fetchSongs());
       onClose(); // Close the modal
+      alert("Song Added Successfully");
     } catch (error) {
       console.error("There was an error adding the song!", error);
     }

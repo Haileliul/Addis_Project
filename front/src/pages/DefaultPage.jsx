@@ -8,6 +8,7 @@ import CreateModal from "../components/CreateModal";
 import UpdateModal from "../components/UpdateModal";
 import { FaMusic } from "react-icons/fa";
 import { fetchSongs } from "../Redux/songsSlice"; // Import the fetchSongs thunk
+import axios from "axios";
 
 const DefaultContent = styled.div`
   flex: 2;
@@ -18,6 +19,12 @@ const DefaultContent = styled.div`
   background-color: ${({ theme }) => theme.colors.secondary};
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+`;
+
+const WellcomeText = styled.p`
+  color: #fff; /* Set text color to white */
+  font-weight: bold; /* Optional: Make the text bold */
+  font-size: 1.5em; /* Optional: Increase font size to make it more like a heading */
 `;
 
 const TopContainer = styled.div`
@@ -116,11 +123,18 @@ const DefaultPage = () => {
     setSelectedSong(song);
     setIsUpdateModalOpen(true);
   };
-
-  const handleDelete = () => {
-    alert("Delete clicked");
+  const handleDelete = async (songId) => {
+    try {
+      await axios.delete(
+        `https://addis-project-3typ.onrender.com/api/Song/${songId}`
+      );
+      dispatch(fetchSongs()); // Refresh the list of songs after deletion
+      alert("Song deleted successfully");
+    } catch (error) {
+      console.error("Error deleting the song:", error);
+      alert("Failed to delete the song");
+    }
   };
-
   const handleAddSong = (newSong) => {
     console.log("New song added:", newSong);
     setIsModalOpen(false);
@@ -129,7 +143,7 @@ const DefaultPage = () => {
 
   const filteredSongs = selectedGenre
     ? songs.filter((song) => song.genre === selectedGenre)
-    : [];
+    : songs;
 
   const getSongCountByGenre = (genre) => {
     return songs.filter((song) => song.genre === genre).length;
@@ -137,7 +151,7 @@ const DefaultPage = () => {
 
   return (
     <DefaultContent>
-      <p>This is the default page.</p>
+      <WellcomeText>Wellcome to MusicApp</WellcomeText>
       <TopContainer>
         <MediumCard onClick={() => setIsModalOpen(true)} />
         <GenerContainer>
@@ -170,7 +184,7 @@ const DefaultPage = () => {
               description={`Artist: ${song.artist}, Album: ${song.album}`}
               prefixIcon={<FaMusic />}
               onEdit={() => handleEdit(song)}
-              onDelete={handleDelete}
+              onDelete={() => handleDelete(song._id)}
             />
           ))
         ) : (
@@ -180,7 +194,7 @@ const DefaultPage = () => {
       <UpdateModal
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
-        onSubmit={handleAddSong}
+        onSubmit={handleEdit}
         initialData={selectedSong}
       />
       <CreateModal

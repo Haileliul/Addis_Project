@@ -14,11 +14,17 @@ const Card = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   cursor: pointer; /* Adds pointer cursor on hover */
+  color: ${({ theme }) => theme.colors.primary};
+  &:hover {
+    background-color: ${({ theme }) =>
+      theme.colors.secondary}; /* Change this to your desired hover color */
+    color: white; /* Optionally, change text color on hover */
+  }
 `;
 
 const Name = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.medium};
-  color: ${({ theme }) => theme.colors.primary};
+
   margin-bottom: ${({ theme }) => theme.spacing.small};
 `;
 
@@ -27,7 +33,7 @@ const NumberValue = styled.div`
   top: ${({ theme }) => theme.spacing.small};
   right: ${({ theme }) => theme.spacing.small};
   font-size: ${({ theme }) => theme.fontSizes.large};
-  color: ${({ theme }) => theme.colors.secondary};
+  y};
 `;
 
 export default function GenerCard({ name, numberValue, onClick }) {
