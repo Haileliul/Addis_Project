@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 connectDB()
   .then(() => {
     app.listen(port, () => {
-      console.log(`App running http://localhost:${port + 1}`);
+      console.log(`App running http://localhost:${port}`);
     });
   })
   .catch((error) => {
