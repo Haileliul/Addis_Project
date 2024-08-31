@@ -853,3 +853,5 @@ Error: Reapplying connection to device 'wlo1' (/org/freedesktop/NetworkManager/D
 Error: Reapplying connection to device 'wlo1' (/org/freedesktop/NetworkManager/Devices/3) failed: Device is not activated
 Error: Reapplying connection to device 'wlo1' (/org/freedesktop/NetworkManager/Devices/3) failed: Device is not activated
 Error: Reapplying connection to device 'wlo1' (/org/freedesktop/NetworkManager/Devices/3) failed: Device is not activated
+Error: Reapplying connection to device 'wlo1' (/org/freedesktop/NetworkManager/Devices/3) failed: Device is not activated
+Error: Reapplying connection to device 'wlo1' (/org/freedesktop/NetworkManager/Devices/3) failed: Device is not activated
